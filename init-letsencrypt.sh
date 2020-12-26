@@ -10,7 +10,7 @@ export DOMAINS="ryanchapin.com www.ryanchapin.com"
 export EMAIL=rchapin@nbinteractive.com
 
 # Set to 1 if you're testing your setup to avoid hitting request limits
-export STAGING=1
+export STAGING=0
 
 # export EMAIL=${EMAIL:-""}
 # export STAGING=${STAGING:-0}
@@ -32,10 +32,6 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-# data_path="./data/certbot"
-# email="" # Adding a valid address is strongly recommended
-# staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
-
 certbot_live_dir=$CERTBOT_CONF_PATH/live
 if [ -d "$certbot_live_dir" ]; then
   read -p "Existing data found for $DOMAINS. Continue and replace existing certificate? (y/N) " decision
@@ -46,13 +42,10 @@ fi
 
 if [ ! -e "$CERTBOT_CONF_PATH/options-ssl-nginx.conf" ] || [ ! -e "$CERTBOT_CONF_PATH/ssl-dhparams.pem" ]; then
   echo "### Downloading recommended TLS parameters ..."
-  # mkdir -p "$data_path/conf"
   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$CERTBOT_CONF_PATH/options-ssl-nginx.conf"
   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$CERTBOT_CONF_PATH/ssl-dhparams.pem"
   echo
 fi
-
-# 
 
 echo "### Creating dummy certificate for $domains ..."
 
@@ -73,11 +66,11 @@ docker-compose up --force-recreate -d nginx
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
-docker-compose run --rm --entrypoint "\ rm -Rf /etc/letsencrypt/live/$domains && \
+docker-compose run --rm --entrypoint "\
+  rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
 echo
-
 
 echo "### Requesting Let's Encrypt certificate for $domains ..."
 #Join $domains array to -d args

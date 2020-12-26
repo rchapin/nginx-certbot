@@ -22,6 +22,9 @@ services:
 
 volumes:
   nginx:
+    external: true
   certbot-conf:
+    external: true
   certbot-www:
+    external: true
   
