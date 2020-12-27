@@ -2,10 +2,11 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:1.15-alpine
+    image: nginx:1.19.6-alpine
     restart: unless-stopped
     volumes:
       - nginx:/etc/nginx/conf.d
+      - nginx-www:/var/www/public_html
       - certbot-conf:/etc/letsencrypt
       - certbot-www:/var/www/certbot
     ports:
@@ -22,6 +23,8 @@ services:
 
 volumes:
   nginx:
+    external: true
+  nginx-www:
     external: true
   certbot-conf:
     external: true
