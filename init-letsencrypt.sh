@@ -2,19 +2,6 @@
 
 set -e
 
-export CERTBOT_CONF_PATH="/var/lib/docker/165537.165537/volumes/certbot-conf/_data"
-export CERTBOT_WWW_PATH="/var/lib/docker/165537.165537/volumes/certbot-www/_data"
-export DOMAINS="ryanchapin.com www.ryanchapin.com"
-
-# Adding a valid email address is strongly recommended
-export EMAIL=rchapin@nbinteractive.com
-
-# Set to 1 if you're testing your setup to avoid hitting request limits
-export STAGING=0
-
-# export EMAIL=${EMAIL:-""}
-# export STAGING=${STAGING:-0}
-
 RSA_KEY_SIZE=4096
 
 # ##############################################################################
