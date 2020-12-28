@@ -56,3 +56,12 @@ chown nginxcertbot: /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/ap
 ```
 sudo -u nginxcertbot ./init-letsencrypt.sh
 ```
+
+1. Create log and config dirs and deploy the configs. Run the following, as root, from the root of the repo.
+```
+mkdir -p /var/log/nginxcertbot
+mkdir /etc/nginxcertbot
+cp configs/etc/nginxcertbot/log-rotate.sh docker-compose.yml /etc/nginxcertbot
+cp configs/etc/rsyslog.d/nginxcertbot.conf /etc/rsyslog.d && systemctl restart rsyslog
+cp configs/etc/systemd/system/nginxcertbot.service /etc/systemd/system && systemctl daemon-reload
+```
