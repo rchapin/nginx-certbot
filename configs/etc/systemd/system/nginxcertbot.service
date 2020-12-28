@@ -1,0 +1,21 @@
+[Unit]
+Description=Nginx Certbot
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=nginxcertbot
+Group=nginxcertbot
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker-compose -f /etc/nginxcertbot/docker-compose.yml stop
+ExecStart=/usr/bin/docker-compose -f /etc/nginxcertbot/docker-compose.yml up
+ExecStop=-/usr/bin/docker-compose -f /etc/nginxcertbot/docker-compose.yml stop
+Restart=always
+RestartSec=20s
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nginxcertbot
+
+[Install]
+WantedBy=multi-user.target

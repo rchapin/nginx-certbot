@@ -11,14 +11,14 @@ In this case, the next uid/gid number that we will use is **165537**.
 
     1. Generate the uid and gids, create the new group and user and add it to the docker group
     ```
-    groupadd -g $NXCB_ID -r $NXCB_USERNAME && useradd -r -g $NXCB_USERNAME -u $NXCB_ID $NXCB_USERNAME && usermod -a -G docker $NXCB_USERNAME
+    groupadd -g $NXCB_ID -r nginxcertbot && useradd -r -g nginxcertbot -u $NXCB_ID nginxcertbot && usermod -a -G docker nginxcertbot
     ```
 
     1. Generate and add the sub ids to their respective files.
     ```
     last_id=$(( ID + 65536 ))
-    usermod --add-subuids "$NXCB_ID"-"$last_id" "$NXCB_USERNAME"
-    usermod --add-subgids "$NXCB_ID"-"$last_id" "$NXCB_USERNAME"
+    usermod --add-subuids "$NXCB_ID"-"$last_id" "nginxcertbot"
+    usermod --add-subgids "$NXCB_ID"-"$last_id" "nginxcertbot"
     ```
 
 1. Create and/or add an entry to the ```/etc/docker/daemon.json``` docker config file and restart the docker daemon.  The following entry enables us to map the uids and gids of the users in the docker container to that of the host.
@@ -49,10 +49,10 @@ envsubst < docker-compose.tmpl > docker-compose.yml
 1. As root run the following to expand the parameters in the nginx config template and write it to the nginx volume.
 ```
 envsubst '$NXCB_PRIMARY_DOMAIN' < templates/app.conf.tmpl > /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/app.conf
-chown $NXCB_USERNAME: /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/app.conf
+chown nginxcertbot: /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/app.conf
 ```
 
-1. Run the following command as root such that the command is run as the ```NXCB_USERNAME``` user in the root of the repo dir.
+1. Run the following command as root such that the command is run as the ```nginxcertbot``` user in the root of the repo dir.
 ```
-sudo -u $NXCB_USERNAME ./init-letsencrypt.sh
+sudo -u nginxcertbot ./init-letsencrypt.sh
 ```
