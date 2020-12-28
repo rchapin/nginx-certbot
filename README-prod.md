@@ -1,4 +1,4 @@
-1. Determing the uid:gid for the nginxcertbot user. Since we are going to use docker's userns-remap feature we need to first determine what the first available uid and gid is by looking at any existing entries in ```/etc/subuid``` and ```/etc/subgid```. For example, let's assume that the following entries exist in both files:
+1. Determine the uid:gid for the nginxcertbot user. Since we are going to use docker's userns-remap feature we need to first determine what the first available uid and gid is by looking at any existing entries in ```/etc/subuid``` and ```/etc/subgid```. For example, let's assume that the following entries exist in both files:
 ```
 rchapin:100000:65536
 ```

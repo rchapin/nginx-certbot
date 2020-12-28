@@ -9,7 +9,7 @@ RSA_KEY_SIZE=4096
 # Build an array of the domains that we will add to the cert from the
 # expected exported env var.
 domains=()
-for d in $DOMAINS
+for d in $NXCB_DOMAINS
 do
   domains+=($d)
 done
@@ -19,7 +19,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-certbot_live_dir=$CERTBOT_CONF_PATH/live
+certbot_live_dir=$NXCB_CERTBOT_CONF_PATH/live
 if [ -d "$certbot_live_dir" ]; then
   read -p "Existing data found for $DOMAINS. Continue and replace existing certificate? (y/N) " decision
   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
@@ -27,15 +27,14 @@ if [ -d "$certbot_live_dir" ]; then
   fi
 fi
 
-if [ ! -e "$CERTBOT_CONF_PATH/options-ssl-nginx.conf" ] || [ ! -e "$CERTBOT_CONF_PATH/ssl-dhparams.pem" ]; then
+if [ ! -e "$NXCB_CERTBOT_CONF_PATH/options-ssl-nginx.conf" ] || [ ! -e "$NXCB_CERTBOT_CONF_PATH/ssl-dhparams.pem" ]; then
   echo "### Downloading recommended TLS parameters ..."
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$CERTBOT_CONF_PATH/options-ssl-nginx.conf"
-  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$CERTBOT_CONF_PATH/ssl-dhparams.pem"
+  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$NXCB_CERTBOT_CONF_PATH/options-ssl-nginx.conf"
+  curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$NXCB_CERTBOT_CONF_PATH/ssl-dhparams.pem"
   echo
 fi
 
 echo "### Creating dummy certificate for $domains ..."
-
 domains_dir="$certbot_live_dir/$domains"
 mkdir -p $domains_dir
 # Path as seen from inside the docker container

@@ -12,6 +12,12 @@ export NXCB_NGINX_IMAGE=nginx:1.19.6-alpine
 
 # Space delimited, quoted list of domains names to add to your cert.
 export NXCB_DOMAINS="example.com www.example.com"
+domains=()
+for d in $NXCB_DOMAINS
+do
+  domains+=($d)
+done
+export NXCB_PRIMARY_DOMAIN=${domains[0]}
 
 # Adding a valid email address is strongly recommended.
 export NXCB_EMAIL=""
@@ -19,6 +25,6 @@ export NXCB_EMAIL=""
 # Set to 1 if you're testing your setup to avoid hitting request limits.
 export NXCB_STAGING=1
 
-export CERTBOT_CONF_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-conf/_data"
-export CERTBOT_WWW_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-www/_data"
+export NXCB_CERTBOT_CONF_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-conf/_data"
+export NXCB_CERTBOT_WWW_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-www/_data"
 
