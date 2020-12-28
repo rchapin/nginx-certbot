@@ -17,7 +17,7 @@ for d in $NXCB_DOMAINS
 do
   domains+=($d)
 done
-export NXCB_PRIMARY_DOMAIN=${domains[0]}
+export NXCB_PRIMARY_DOMAIN='${domains[0]}'
 
 # Adding a valid email address is strongly recommended.
 export NXCB_EMAIL=""

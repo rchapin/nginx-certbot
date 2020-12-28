@@ -46,10 +46,13 @@ docker volume create --name certbot-www
 envsubst < docker-compose.tmpl > docker-compose.yml
 ```
 
-1. Copy the ```/data/nginx/app.conf``` to the nginx volume **TODO: parameterize this file somehow** set ownership to nginxcertbot user
-
-
-1. Run the following command as root such that the command is run as the nginx user in the root of the repo dir.
+1. As root run the following to expand the parameters in the nginx config template and write it to the nginx volume.
 ```
-sudo -u nginxcertbot ./init-letsencrypt.sh
+envsubst '$NXCB_PRIMARY_DOMAIN' < templates/app.conf.tmpl > /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/app.conf
+chown $NXCB_USERNAME: /var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/nginx/_data/app.conf
+```
+
+1. Run the following command as root such that the command is run as the ```NXCB_USERNAME``` user in the root of the repo dir.
+```
+sudo -u $NXCB_USERNAME ./init-letsencrypt.sh
 ```
