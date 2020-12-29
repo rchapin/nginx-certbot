@@ -1,9 +1,11 @@
+# nginx-certbot Production Deployment
+
 1. Determine the uid:gid for the nginxcertbot user. Since we are going to use docker's userns-remap feature we need to first determine what the first available uid and gid is by looking at any existing entries in ```/etc/subuid``` and ```/etc/subgid```. For example, let's assume that the following entries exist in both files:
 ```
 rchapin:100000:65536
 ```
 
-In this case, the next uid/gid number that we will use is **165537**.
+    In this case, the next uid/gid number that we will use is **165537**.
 
 1. Copy the ```env-vars.tmpl``` to ```env-vars.sh``` and set all of the variables.  ```NXCB_ID``` should be set to the uid that you derived in the previous step.
 
@@ -64,4 +66,10 @@ mkdir /etc/nginxcertbot
 cp configs/etc/nginxcertbot/log-rotate.sh docker-compose.yml /etc/nginxcertbot
 cp configs/etc/rsyslog.d/nginxcertbot.conf /etc/rsyslog.d && systemctl restart rsyslog
 cp configs/etc/systemd/system/nginxcertbot.service /etc/systemd/system && systemctl daemon-reload
+```
+
+1. Now you can run it as a service.  Enable and start it.  Then customize your nginx configs to suit your needs.
+```
+systemctl enable nginxcertbot
+systemctl start nginxcertbot
 ```
