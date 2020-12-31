@@ -6,6 +6,9 @@ RSA_KEY_SIZE=4096
 
 # ##############################################################################
 
+# Source the env vars shell script
+source $1
+
 # Build an array of the domains that we will add to the cert from the
 # expected exported env var.
 domains=()
@@ -72,7 +75,7 @@ case "$EMAIL" in
 esac
 
 # Enable staging mode if needed
-if [ $STAGING != "0" ]; then staging_arg="--staging"; fi
+if [ $NXCB_STAGING != "0" ]; then staging_arg="--staging"; fi
 
 docker-compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \

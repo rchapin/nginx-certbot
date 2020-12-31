@@ -2,26 +2,27 @@
 
 # The uid:gid to be used for the nginxcertbot to be added to the system and
 # underwhich the containers will run.
-export NXCB_ID=<uid-for-nginxcertbot-user>
+export NXCB_ID=165537
 export NXCB_RANGE=65536
 
 # The nginx image name and tag that you want to use.
 export NXCB_NGINX_IMAGE=nginx:1.19.6-alpine
 
 # Space delimited, quoted list of domains names to add to your cert.
-export NXCB_DOMAINS="example.com www.example.com"
+export NXCB_DOMAINS="ryanchapin.com www.ryanchapin.com bikerpeeps.com www.bikerpeeps.com sacksandchapin.com www.sacksandchapin.com"
 domains=()
 for d in $NXCB_DOMAINS
 do
   domains+=($d)
 done
-export NXCB_PRIMARY_DOMAIN='${domains[0]}'
+domain=${domains[0]}
+export NXCB_PRIMARY_DOMAIN=$domain
 
 # Adding a valid email address is strongly recommended.
-export NXCB_EMAIL=""
+export NXCB_EMAIL="rchapin@nbinteractive.com"
 
 # Set to 1 if you're testing your setup to avoid hitting request limits.
-export NXCB_STAGING=1
+export NXCB_STAGING=0
 
 export NXCB_CERTBOT_CONF_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-conf/_data"
 export NXCB_CERTBOT_WWW_PATH="/var/lib/docker/${NXCB_ID}.${NXCB_ID}/volumes/certbot-www/_data"
